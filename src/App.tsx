@@ -112,11 +112,11 @@ const ScoreScreen: React.FC = () => {
 
 function App() {
   return (
-    <Router>
+    <Router basename="/push-the-tempo">
       <div className="app">
         <header>
           <h1>
-            <span role="img">🔊</span> 4 ON THE FLOOR
+            <span role="img">🔊</span> push the tempo
           </h1>
         </header>
         <main>
