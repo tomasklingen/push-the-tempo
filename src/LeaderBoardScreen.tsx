@@ -9,38 +9,51 @@ interface Score {
   score: number;
 }
 
-function getScores(): Promise<Score[]> {
-  const SCORES: Score[] = [
-    {
-      id: 1,
-      name: "tomas",
-      score: 13
-    },
-    {
-      id: 2,
-      name: "sanne",
-      score: 156
-    },
-    {
-      id: 3,
-      name: "tomas",
-      score: 17
-    },
-    {
-      id: 4,
-      name: "tomas",
-      score: 40
-    },
-    {
-      id: 5,
-      name: "piet",
-      score: 17
-    }
-  ];
+const LS_KEY = "push-the-tempo-scores";
+
+const DEFAULT_SCORES: Score[] = [
+  {
+    id: 1,
+    name: "tomas",
+    score: 20
+  },
+  {
+    id: 2,
+    name: "sanne",
+    score: 150
+  },
+  {
+    id: 3,
+    name: "tomas",
+    score: 30
+  },
+  {
+    id: 4,
+    name: "tomas",
+    score: 40
+  },
+  {
+    id: 5,
+    name: "piet",
+    score: 85
+  }
+];
+
+function getScoresAsync(): Promise<Score[]> {
+  const scoresData = localStorage.getItem(LS_KEY);
+
+  if (!scoresData) {
+    // fill once with some default scores.
+    localStorage.setItem(LS_KEY, JSON.stringify(DEFAULT_SCORES));
+  }
+
+  const scoresList = scoresData
+    ? JSON.parse(scoresData || "[]")
+    : DEFAULT_SCORES;
 
   return new Promise(resolve => {
     setTimeout(() => {
-      resolve(SCORES);
+      resolve(scoresList);
     }, 2000);
   });
 }
@@ -52,18 +65,14 @@ export const LeaderBoardScreen: React.FC = () => {
   async function loadScores() {
     setLoading(true);
 
-    const scores = await getScores();
-
+    const scores = await getScoresAsync();
     setScores(scores.sort((a, b) => b.score - a.score));
+
     setLoading(false);
   }
 
   useEffect(() => {
     loadScores();
-
-    return () => {
-      setLoading(false);
-    };
   }, []);
 
   return (
