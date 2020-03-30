@@ -5,7 +5,7 @@ import { SmallLCD } from "./Lcd";
 export const GameScreen: React.FC = () => {
   console.log("gamescreen rendered");
   const randomBpm = () => Math.floor(Math.random() * 100 + 80);
-  const [bpmTarget, setBpmTarget] = useState(randomBpm());
+  const [bpmTarget, setBpmTarget] = useState(0);
   const [playerBpm, setPlayerBpm] = useState(0);
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(6);
@@ -15,6 +15,10 @@ export const GameScreen: React.FC = () => {
     console.log("Starting");
     setIsRunning(true);
   };
+
+  useEffect(() => {
+    setBpmTarget(randomBpm());
+  }, []);
 
   useEffect(() => {
     if (!isRunning) {
