@@ -1,33 +1,38 @@
-import React, { useState } from "react";
-import Button from "./Button";
+import React, { useEffect, useState } from "react";
+import { BpmButton, Button } from "./Button";
 import { SmallLCD } from "./Lcd";
-import { clearInterval } from "timers";
-import { BpmButton } from "./App";
 
 export const GameScreen: React.FC = () => {
   console.log("gamescreen rendered");
   const randomBpm = () => Math.floor(Math.random() * 100 + 80);
-  const [startDate, setStartDate] = useState<Date | null>(null);
   const [bpmTarget, setBpmTarget] = useState(randomBpm());
   const [playerBpm, setPlayerBpm] = useState(0);
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(6);
+  const [isRunning, setIsRunning] = useState(false);
+
   const start = () => {
     console.log("Starting");
-    setStartDate(new Date());
-    startTimer();
+    setIsRunning(true);
   };
-  const startTimer = () => {
-    const intervalId = setInterval(() => {
+
+  useEffect(() => {
+    if (!isRunning) {
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
       console.log(`timeleft: ${timeLeft}`);
       if (timeLeft > 0) {
-        setTimeLeft(timeLeft - 1);
-      } else {
-        console.log("clearing interval");
-        clearInterval(intervalId);
+        setTimeLeft(time => time - 1);
       }
     }, 1000);
-  };
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [isRunning, timeLeft]);
+
   /**
    * Calculate points for bpm accuracy. 10 for exact bpm hit, 5 for a close hit, otherwise 0.
    * @param bpm
@@ -37,10 +42,12 @@ export const GameScreen: React.FC = () => {
     const diff = Math.abs(bpm - bpmTarget);
     return diff ? (diff < 10 ? 5 : 0) : 10;
   };
+
   const bpmHandler = (bpm: number) => {
     setPlayerBpm(bpm);
     setScore(curScore => curScore + calculateScore(bpm, bpmTarget));
   };
+
   return (
     <div>
       <h2>
@@ -60,10 +67,10 @@ export const GameScreen: React.FC = () => {
         <SmallLCD style={{ float: "right" }} value={timeLeft}></SmallLCD>
       </h2>
 
-      {startDate ? (
+      {isRunning ? (
         <BpmButton onBpm={bpmHandler}>Hit</BpmButton>
       ) : (
-        <Button onClick={start}>&#9654;</Button>
+        <Button onClick={start}>&#9654; Start</Button>
       )}
     </div>
   );
