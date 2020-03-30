@@ -8,41 +8,37 @@ interface GameScreenProps {
 }
 
 export const GameScreen: React.FC<GameScreenProps> = ({ onGameOver }) => {
-  const randomBpm = () => Math.floor(Math.random() * 100 + 80);
-  const [bpmTarget, setBpmTarget] = useState(0);
+  const [bpmTarget] = useState(() => Math.floor(Math.random() * 100 + 80));
   const [playerBpm, setPlayerBpm] = useState(0);
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(5);
   const [isRunning, setIsRunning] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
 
   const start = () => {
-    setTimeLeft(5);
     setIsRunning(true);
   };
-
-  useEffect(() => {
-    setBpmTarget(randomBpm());
-  }, []);
 
   useEffect(() => {
     if (!isRunning) {
       return;
     }
 
-    const timeoutId = setTimeout(() => {
-      if (timeLeft > 1) {
-        setTimeLeft(time => time - 1);
-      } else {
-        onGameOver(score);
-        setIsFinished(true);
-      }
+    const timerID = setInterval(() => {
+      setTimeLeft(time => time - 1);
     }, 1000);
 
     return () => {
-      clearTimeout(timeoutId);
+      clearInterval(timerID);
     };
-  }, [isRunning, timeLeft]);
+  }, [isRunning]);
+
+  useEffect(() => {
+    if (timeLeft < 1) {
+      onGameOver(score);
+      setIsFinished(true);
+    }
+  }, [timeLeft, onGameOver, score]);
 
   /**
    * Calculate points for bpm accuracy. 10 for exact bpm hit, 5 for a close hit, otherwise 0.
@@ -61,22 +57,24 @@ export const GameScreen: React.FC<GameScreenProps> = ({ onGameOver }) => {
 
   return (
     <div>
-      <h2>
-        Bpm Target
-        <SmallLCD style={{ float: "right" }} value={bpmTarget}></SmallLCD>
-      </h2>
-      <h2>
-        Your BPM
-        <SmallLCD style={{ float: "right" }} value={playerBpm}></SmallLCD>
-      </h2>
-      <h2>
-        Score
-        <SmallLCD style={{ float: "right" }} value={score}></SmallLCD>
-      </h2>
-      <h2>
-        Time left
-        <SmallLCD style={{ float: "right" }} value={timeLeft}></SmallLCD>
-      </h2>
+      <div style={{ marginBottom: "20px" }}>
+        <div className="cell">
+          <h3>Bpm Target</h3>
+          <SmallLCD value={bpmTarget}></SmallLCD>
+        </div>
+        <div className="cell">
+          <h3>Your BPM</h3>
+          <SmallLCD value={playerBpm}></SmallLCD>
+        </div>
+        <div className="cell">
+          <h3>Score</h3>
+          <SmallLCD value={score}></SmallLCD>
+        </div>
+        <div className="cell">
+          <h3>Time left</h3>
+          <SmallLCD value={timeLeft}></SmallLCD>
+        </div>
+      </div>
 
       {isRunning ? (
         <BpmButton onBpm={bpmHandler}>Hit</BpmButton>
