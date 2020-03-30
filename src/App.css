@@ -60,3 +60,16 @@ body {
   display: inline-block;
   text-align: center;
 }
+
+@keyframes pump {
+  from {
+    box-shadow: hsl(48, 93%, 58%) 0 0 10px;
+  }
+  to {
+    box-shadow: hsl(48, 93%, 58%) 0 0 15px 4px;
+  }
+}
+
+.pump-it {
+  animation: 0.7s infinite pump;
+}

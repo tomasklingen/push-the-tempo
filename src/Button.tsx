@@ -32,12 +32,18 @@ export const BpmButton: React.FC<BpmButtonProps> = props => {
 
 interface ButtonProps {
   onClick?: (e: React.MouseEvent) => void;
+  glow?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = props => {
   return (
-    <div className="button-container">
-      <button className="shiny-button" onClick={props.onClick}>
+    <div className="big-round-button-container">
+      <button
+        className={
+          "big-round-button shiny-button " + (props.glow ? "pump-it" : "")
+        }
+        onClick={props.onClick}
+      >
         {props.children}
       </button>
     </div>

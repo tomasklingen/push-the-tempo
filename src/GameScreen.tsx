@@ -11,7 +11,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({ onGameOver }) => {
   const [bpmTarget] = useState(() => Math.floor(Math.random() * 100 + 80));
   const [playerBpm, setPlayerBpm] = useState(0);
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(5);
+  const [timeLeft, setTimeLeft] = useState(15);
   const [isRunning, setIsRunning] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
 
@@ -79,7 +79,9 @@ export const GameScreen: React.FC<GameScreenProps> = ({ onGameOver }) => {
       {isRunning ? (
         <BpmButton onBpm={bpmHandler}>Hit</BpmButton>
       ) : (
-        <Button onClick={start}>&#9654; Start</Button>
+        <Button glow={true} onClick={start}>
+          &#9654; <div style={{ fontSize: "0.5em" }}>Start</div>
+        </Button>
       )}
       {isFinished ? <Redirect to="score" push={true}></Redirect> : ""}
     </div>

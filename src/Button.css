@@ -1,13 +1,4 @@
-@keyframes pump {
-  from {
-    box-shadow: #333 0 0 10px;
-  }
-  to {
-    box-shadow: #333 0 5px 15px 4px;
-  }
-}
-
-.button-container {
+.big-round-button-container {
   position: relative;
   width: 80%;
   padding-bottom: 80%;
@@ -20,7 +11,6 @@
   position: absolute;
   width: 100%;
   height: 100%;
-
   border-radius: 50%;
   background: radial-gradient(circle, rgb(247, 247, 247) 0%, #444 100%);
   box-shadow: 0px 3px 4px #333, inset 0px 2px 3px #fff;
@@ -52,4 +42,10 @@
   bottom: -18px;
   border-radius: 50%;
   box-shadow: 0px 1px 8px #888 inset, 0px -3px 5px #fff inset;
+}
+
+.submit-button {
+  padding: 10px;
+  border: 3px solid #aaa;
+  border-radius: 5px;
 }

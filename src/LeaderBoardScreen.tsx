@@ -106,7 +106,7 @@ export const LeaderBoardScreen: React.FC = () => {
         </ol>
       </LCD>
       <Link to="game">
-        <Button>&#9654;</Button>
+        <Button glow={true}>&#9654;</Button>
       </Link>
     </React.Fragment>
   );
