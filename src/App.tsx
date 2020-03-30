@@ -17,7 +17,7 @@ function App() {
       <div className="app">
         <header>
           <h1>
-            <span role="img">🔊</span> Push the tempo
+            <span role="img">🔊</span> Push the tempo!
           </h1>
         </header>
         <main>
