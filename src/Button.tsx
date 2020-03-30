@@ -36,8 +36,10 @@ interface ButtonProps {
 
 export const Button: React.FC<ButtonProps> = props => {
   return (
-    <button className="shiny-button" onClick={props.onClick}>
-      {props.children}
-    </button>
+    <div className="button-container">
+      <button className="shiny-button" onClick={props.onClick}>
+        {props.children}
+      </button>
+    </div>
   );
 };
