@@ -33,7 +33,7 @@ export const ScoreScreen: React.FC<ScoreScreenProps> = ({ score }) => {
         <form onSubmit={submitHandler}>
           <div>
             <input
-              style={{ padding: "5px", margin: "15px" }}
+              style={{ padding: "5px", margin: "15px", fontSize: "16px" }}
               type="text"
               name="name"
               placeholder="your name..."

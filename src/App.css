@@ -18,7 +18,6 @@ body {
 
 .app {
   user-select: none;
-  width: calc(200px + 20vw);
   border: 3px solid #999;
   border-top-color: #dedede;
   background: linear-gradient(200deg, #999 0%, #333 60%, #222 60%);
