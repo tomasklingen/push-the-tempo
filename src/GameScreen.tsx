@@ -3,7 +3,11 @@ import { Redirect } from "react-router-dom";
 import { BpmButton, Button } from "./Button";
 import { SmallLCD } from "./Lcd";
 
-export const GameScreen: React.FC = () => {
+interface GameScreenProps {
+  onGameOver: (score: number) => void;
+}
+
+export const GameScreen: React.FC<GameScreenProps> = ({ onGameOver }) => {
   const randomBpm = () => Math.floor(Math.random() * 100 + 80);
   const [bpmTarget, setBpmTarget] = useState(0);
   const [playerBpm, setPlayerBpm] = useState(0);
@@ -30,6 +34,7 @@ export const GameScreen: React.FC = () => {
       if (timeLeft > 1) {
         setTimeLeft(time => time - 1);
       } else {
+        onGameOver(score);
         setIsFinished(true);
       }
     }, 1000);
@@ -78,7 +83,7 @@ export const GameScreen: React.FC = () => {
       ) : (
         <Button onClick={start}>&#9654; Start</Button>
       )}
-      {isFinished ? <Redirect to="score"></Redirect> : ""}
+      {isFinished ? <Redirect to="score" push={true}></Redirect> : ""}
     </div>
   );
 };

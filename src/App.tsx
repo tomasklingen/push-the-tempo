@@ -1,14 +1,17 @@
-import React from "react";
-import "./App.css";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import "./App.css";
 import { GameScreen } from "./GameScreen";
 import { LeaderBoardScreen } from "./LeaderBoardScreen";
-
-const ScoreScreen: React.FC = () => {
-  return <p>hi</p>;
-};
+import { ScoreScreen } from "./ScoreScreen";
 
 function App() {
+  const [score, setScore] = useState(0);
+
+  const gameOverHandler = (score: number) => {
+    setScore(score);
+  };
+
   return (
     <Router basename="/push-the-tempo">
       <div className="app">
@@ -22,10 +25,10 @@ function App() {
             <LeaderBoardScreen />
           </Route>
           <Route path="/game">
-            <GameScreen></GameScreen>
+            <GameScreen onGameOver={gameOverHandler}></GameScreen>
           </Route>
           <Route path="/score">
-            <ScoreScreen />
+            <ScoreScreen score={score} />
           </Route>
         </main>
       </div>
