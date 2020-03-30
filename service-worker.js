@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/push-the-tempo/precache-manifest.aa024c266f557f294132db7fd1f02eb9.js"
+  "/push-the-tempo/precache-manifest.70f1c70c5452c077766f1ee3c3f6dde0.js"
 );
 
 self.addEventListener('message', (event) => {
