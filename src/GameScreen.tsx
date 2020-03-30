@@ -1,7 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
-import { BpmButton, Button } from "./Button";
+import { Button } from "./Button";
 import { SmallLCD } from "./Lcd";
+
+interface BpmTrackerProps {
+  onBpm: (bpm: number) => void;
+  [otherProps: string]: any;
+}
+
+export const BpmTracker: React.FC<BpmTrackerProps> = props => {
+  const [lastUserBeat, setLastUserBeat] = useState<Date>(new Date());
+
+  const addTap = (e: any) => {
+    const now = new Date();
+    if (lastUserBeat !== null) {
+      const bpm = Math.round(60000 / (now.valueOf() - lastUserBeat.valueOf()));
+      props.onBpm(bpm);
+    }
+    setLastUserBeat(now);
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", addTap, false);
+    document.addEventListener("keydown", addTap, false);
+
+    return () => {
+      document.removeEventListener("mousedown", addTap);
+      document.removeEventListener("keydown", addTap);
+    };
+  });
+
+  return <React.Fragment>{props.children}</React.Fragment>;
+};
 
 interface GameScreenProps {
   onGameOver: (score: number) => void;
@@ -40,6 +70,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({ onGameOver }) => {
     }
   }, [timeLeft, onGameOver, score]);
 
+  const bpmInterval = (bpm: number) => (60 / bpm) * 1000;
   /**
    * Calculate points for bpm accuracy. 10 for exact bpm hit, 5 for a close hit, otherwise 0.
    * @param bpm
@@ -77,9 +108,11 @@ export const GameScreen: React.FC<GameScreenProps> = ({ onGameOver }) => {
       </div>
 
       {isRunning ? (
-        <BpmButton onBpm={bpmHandler}>Hit</BpmButton>
+        <BpmTracker onBpm={bpmHandler}>
+          <Button pumpIt={bpmInterval(bpmTarget)}>Hit</Button>
+        </BpmTracker>
       ) : (
-        <Button glow={true} onClick={start}>
+        <Button pumpIt={bpmInterval(bpmTarget)} onClick={start}>
           &#9654; <div style={{ fontSize: "0.5em" }}>Start</div>
         </Button>
       )}

@@ -24,10 +24,9 @@ export const ScoreScreen: React.FC<ScoreScreenProps> = ({ score }) => {
 
   return (
     <div>
-      <p>
-        <h2>Well done! Your score: </h2>
-        <SmallLCD value={score}></SmallLCD>
-      </p>
+      <h2>Well done! Your score: </h2>
+      <SmallLCD value={score}></SmallLCD>
+
       <div>
         <h2>Enter your name to enter the hall of fame!</h2>
         <form onSubmit={submitHandler}>
