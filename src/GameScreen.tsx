@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { Redirect } from "react-router-dom";
 import { BpmButton, Button } from "./Button";
 import { SmallLCD } from "./Lcd";
 
 export const GameScreen: React.FC = () => {
-  console.log("gamescreen rendered");
   const randomBpm = () => Math.floor(Math.random() * 100 + 80);
   const [bpmTarget, setBpmTarget] = useState(0);
   const [playerBpm, setPlayerBpm] = useState(0);
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(6);
+  const [timeLeft, setTimeLeft] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
 
   const start = () => {
-    console.log("Starting");
+    setTimeLeft(5);
     setIsRunning(true);
   };
 
@@ -26,9 +27,10 @@ export const GameScreen: React.FC = () => {
     }
 
     const timeoutId = setTimeout(() => {
-      console.log(`timeleft: ${timeLeft}`);
-      if (timeLeft > 0) {
+      if (timeLeft > 1) {
         setTimeLeft(time => time - 1);
+      } else {
+        setIsFinished(true);
       }
     }, 1000);
 
@@ -76,6 +78,7 @@ export const GameScreen: React.FC = () => {
       ) : (
         <Button onClick={start}>&#9654; Start</Button>
       )}
+      {isFinished ? <Redirect to="score"></Redirect> : ""}
     </div>
   );
 };
