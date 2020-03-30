@@ -1,4 +1,5 @@
 import React, { CSSProperties } from "react";
+import "./Lcd.css";
 
 interface SmallLCDProps {
   value: number | string;
@@ -19,7 +20,7 @@ export const SmallLCD: React.FC<SmallLCDProps> = props => {
         display: "inline",
         margin: 0,
         height: "initial",
-        padding: "3px"
+        padding: "10px"
       }}
     >
       {formatText(props.value)}
