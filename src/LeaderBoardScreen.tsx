@@ -40,22 +40,39 @@ const DEFAULT_SCORES: Score[] = [
 ];
 
 function getScoresAsync(): Promise<Score[]> {
-  const scoresData = localStorage.getItem(LS_KEY);
-
-  if (!scoresData) {
-    // fill once with some default scores.
-    localStorage.setItem(LS_KEY, JSON.stringify(DEFAULT_SCORES));
-  }
-
-  const scoresList = scoresData
-    ? JSON.parse(scoresData || "[]")
-    : DEFAULT_SCORES;
+  const scoresList = getScoresFromLocalstorage();
 
   return new Promise(resolve => {
     setTimeout(() => {
       resolve(scoresList);
     }, 2000);
   });
+}
+
+/**
+ * Get scores from localstorage or default scores.
+ */
+function getScoresFromLocalstorage(): Score[] {
+  let scoresList: Score[] = JSON.parse(localStorage.getItem(LS_KEY) || "[]");
+
+  if (scoresList.length === 0) {
+    // fill once with some default scores.
+    localStorage.setItem(LS_KEY, JSON.stringify(DEFAULT_SCORES));
+    scoresList = DEFAULT_SCORES;
+  }
+
+  return scoresList;
+}
+
+export function saveScore({ name, score }: Pick<Score, "name" | "score">) {
+  const scoreList = getScoresFromLocalstorage();
+  const highestId = scoreList.reduce((prev, cur) => {
+    return prev.id > cur.id ? prev : cur;
+  }).id;
+
+  const newScoreItem: Score = { id: highestId + 1, name, score };
+
+  localStorage.setItem(LS_KEY, JSON.stringify([...scoreList, newScoreItem]));
 }
 
 export const LeaderBoardScreen: React.FC = () => {
