@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { timer, Observable } from "rxjs";
+import { mapTo, tap } from "rxjs/operators";
 import { Button } from "./Button";
 import LCD from "./Lcd";
 
@@ -39,14 +41,11 @@ const DEFAULT_SCORES: Score[] = [
   }
 ];
 
-function getScoresAsync(): Promise<Score[]> {
+function getScoresAsync(): Observable<Score[]> {
   const scoresList = getScoresFromLocalstorage();
 
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(scoresList);
-    }, 2000);
-  });
+  // Fake delay...
+  return timer(2000).pipe(mapTo(scoresList));
 }
 
 /**
@@ -79,17 +78,25 @@ export const LeaderBoardScreen: React.FC = () => {
   const [scores, setScores] = useState<Score[]>([]);
   const [loading, setLoading] = useState(false);
 
-  async function loadScores() {
+  function loadScores() {
     setLoading(true);
 
-    const scores = await getScoresAsync();
-    setScores(scores.sort((a, b) => b.score - a.score));
-
-    setLoading(false);
+    return getScoresAsync().pipe(
+      tap((scores: Score[]) => {
+        setScores(scores.sort((a, b) => b.score - a.score));
+        setLoading(false);
+      })
+    );
   }
 
   useEffect(() => {
-    loadScores();
+    const subscription = loadScores().subscribe();
+
+    return () => {
+      // When component unmounts before async operation is done, unsubscribe to cancel.
+      // Rxjs <3
+      subscription.unsubscribe();
+    };
   }, []);
 
   return (
