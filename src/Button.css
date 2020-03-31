@@ -10,6 +10,10 @@ button {
   text-align: initial;
 }
 
+/**
+ This is kind of hacked together. In a bigger app I would split up the styling a bit better so it's more reusable. (And use sass or styled components)
+*/
+
 .shiny-button {
   display: inline-block;
   position: absolute;

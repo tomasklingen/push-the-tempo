@@ -30,6 +30,7 @@ export const BpmTracker: React.FC<BpmTrackerProps> = props => {
     };
   });
 
+  // This is kind of useless I think, not sure if there is another way? Using context api maybe?
   return <React.Fragment>{props.children}</React.Fragment>;
 };
 
