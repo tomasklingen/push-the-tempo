@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useState, FormEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { SmallLCD } from "./Lcd";
 import { saveScore } from "./LeaderBoardScreen";
 
@@ -9,9 +9,9 @@ interface ScoreScreenProps {
 
 export const ScoreScreen: React.FC<ScoreScreenProps> = ({ score }) => {
   const [name, setName] = useState("");
-  const history = useHistory();
+  const navigate = useNavigate();
 
-  const submitHandler = (e: React.FormEvent) => {
+  const submitHandler = (e: FormEvent) => {
     e.preventDefault();
 
     saveScore({
@@ -19,7 +19,7 @@ export const ScoreScreen: React.FC<ScoreScreenProps> = ({ score }) => {
       score
     });
 
-    history.push("/");
+    navigate("/");
   };
 
   return (

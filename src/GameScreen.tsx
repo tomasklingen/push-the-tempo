@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Redirect } from "react-router-dom";
+import { useEffect, useState, FC, Fragment, ReactNode } from "react";
+import { Navigate } from "react-router-dom";
 import { Button } from "./Button";
 import { SmallLCD } from "./Lcd";
 
 interface BpmTrackerProps {
   onBpm: (bpm: number) => void;
+  children?: ReactNode;
   [otherProps: string]: any;
 }
 
-export const BpmTracker: React.FC<BpmTrackerProps> = props => {
+export const BpmTracker: FC<BpmTrackerProps> = props => {
   const [lastUserBeat, setLastUserBeat] = useState<Date>(new Date());
 
-  const addTap = (e: any) => {
+  const addTap = () => {
     const now = new Date();
     if (lastUserBeat !== null) {
       const bpm = Math.round(60000 / (now.valueOf() - lastUserBeat.valueOf()));
@@ -31,14 +32,14 @@ export const BpmTracker: React.FC<BpmTrackerProps> = props => {
   });
 
   // This is kind of useless I think, not sure if there is another way? Using context api maybe?
-  return <React.Fragment>{props.children}</React.Fragment>;
+  return <Fragment>{props.children}</Fragment>;
 };
 
 interface GameScreenProps {
   onGameOver: (score: number) => void;
 }
 
-export const GameScreen: React.FC<GameScreenProps> = ({ onGameOver }) => {
+export const GameScreen: FC<GameScreenProps> = ({ onGameOver }) => {
   const [bpmTarget] = useState(() => Math.floor(Math.random() * 100 + 80));
   const [playerBpm, setPlayerBpm] = useState(0);
   const [score, setScore] = useState(0);
@@ -117,7 +118,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({ onGameOver }) => {
           &#9654; <div style={{ fontSize: "0.5em" }}>Start</div>
         </Button>
       )}
-      {isFinished ? <Redirect to="score" push={true}></Redirect> : ""}
+      {isFinished ? <Navigate to="score" replace /> : null}
     </div>
   );
 };

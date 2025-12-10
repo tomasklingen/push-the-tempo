@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { GameScreen } from "./GameScreen";
 import { LeaderBoardScreen } from "./LeaderBoardScreen";
@@ -21,15 +21,11 @@ function App() {
           </h1>
         </header>
         <main>
-          <Route path="/" exact>
-            <LeaderBoardScreen />
-          </Route>
-          <Route path="/game">
-            <GameScreen onGameOver={gameOverHandler}></GameScreen>
-          </Route>
-          <Route path="/score">
-            <ScoreScreen score={score} />
-          </Route>
+          <Routes>
+            <Route path="/" element={<LeaderBoardScreen />} />
+            <Route path="/game" element={<GameScreen onGameOver={gameOverHandler} />} />
+            <Route path="/score" element={<ScoreScreen score={score} />} />
+          </Routes>
         </main>
       </div>
     </Router>

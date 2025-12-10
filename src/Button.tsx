@@ -1,8 +1,9 @@
-import React from "react";
 import "./Button.css";
+import { ReactNode, MouseEvent } from "react";
 
 interface ButtonProps {
-  onClick?: (e: React.MouseEvent) => void;
+  onClick?: (e: MouseEvent) => void;
+  children?: ReactNode;
 
   /**
    * Animation speed in ms.
